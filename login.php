@@ -5,16 +5,16 @@
         header('Location: index.php');
         return;
     };
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        if (strlen($_POST['username']) < 1 || strlen($_POST['password']) < 1) {
-            $_SESSION['error'] = 'Username and password are required.';
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        if (strlen($_POST['email']) < 1 || strlen($_POST['password']) < 1) {
+            $_SESSION['error'] = 'Email and password are required.';
             header('Location: login.php');
             return;
         } else {
             $hash = hash('md5', $_POST['password']);
-            $stmt = $pdo->prepare('SELECT user_id, name from users WHERE username = :user AND passowrd = :pw');
+            $stmt = $pdo->prepare('SELECT user_id, name from users WHERE email = :em AND passowrd = :pw');
             $stmt->execute(array(
-                ':user' => $_POST['username'],
+                ':em' => $_POST['email'],
                 ':pw' => $hash
             ));
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -25,7 +25,7 @@
                 header('Location: index.php');
                 return;
             } else {
-                $_SESSION['error'] = 'Incorrect username or password.';
+                $_SESSION['error'] = 'Incorrect email or password.';
                 header('Location: login.php');
                 return;
             }
@@ -45,8 +45,8 @@
             }
         ?>
         <form method="POST">
-            <label for="username">Username:</label>
-            <input type="text" name="username">
+            <label for="email">Email:</label>
+            <input type="text" name="Email">
             <label for="password">Password:</label>
             <input type="text" name="password">
             <input type="submit" value="Log in">
